@@ -21,12 +21,12 @@
     "php": ">=7.1",
 	"nesbot/carbon": "~2.16",
     "guzzlehttp/guzzle": "~6.2",
-	"imangazaliev/didom": "^1.14",
-	"league/flysystem": "^1.0",
-	"psr/cache": "^1.0",
+	"imangazaliev/didom": "~1.0",
+	"league/flysystem": "~1.0",
+	"psr/cache": "~1.0",
 	"str/str": "~1.1",
-	"drupol/collection":"^0.0",
-	"symfony/cache": "~4.2.0"
+	"drupol/collection":"~0.0",
+	"symfony/cache": "~4.2"
   },
   "autoload": {
     "psr-4": {
