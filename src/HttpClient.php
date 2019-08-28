@@ -19,28 +19,25 @@ use yii\helpers\ArrayHelper;
  */
 class HttpClient
 {
-    /**
-     * @var int
-     */
+    /** @var string */
     protected $id;
 
-    /** @var bool */
-    protected $debug;
-
-    /** @var bool */
-    protected $proxy;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $base_uri;
+
+    /** @var array */
+    protected $params;
 
     /** @var array */
     protected $login;
 
-    /**
-     * @var string
-     */
+    /** @var bool */
+    protected $debug;
+
+    /** @var array proxy list */
+    protected $proxy;
+
+    /** @var string */
     protected $dir;
 
     /** @var Client */
@@ -49,9 +46,7 @@ class HttpClient
     /** @var string */
     private $_url;
 
-    /**
-     * @var FileCookieJar
-     */
+    /** @var FileCookieJar */
     private $_cookieJar;
 
     /**
@@ -96,7 +91,7 @@ class HttpClient
     public function request(string $method, string $url, array $params = []): ResponseInterface
     {
         try {
-            $params = ArrayHelper::merge($params, [
+            $params = ArrayHelper::merge($this->params, $params, [
                 'on_stats' => static function (TransferStats $stats) use (&$full_url) {
                     $full_url = $stats->getEffectiveUri();
                 },
