@@ -5,9 +5,7 @@
     "sort-packages": true
   },
   "keywords": [
-    "crawler",
-    "email",
-    "module"
+    "crawler"
   ],
   "homepage": "https://github.com/loveorigami/lo-crawler",
   "license": "MIT",
