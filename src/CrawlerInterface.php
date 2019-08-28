@@ -24,6 +24,13 @@ interface CrawlerInterface
     public function file(string $filename): self;
 
     /**
+     * @param array       $params
+     * @param string|null $code
+     * @return self
+     */
+    public function login(array $params, ?string $code = null): self;
+
+    /**
      * @param string $url
      * @param array  $params
      * @return self
@@ -38,11 +45,22 @@ interface CrawlerInterface
     public function post(string $url, array $params = []): self;
 
     /**
-     * Чтение файла
+     * File read
      *
      * @return self
      */
     public function read(): self;
+
+    /**
+     * @return self
+     */
+    public function convert(): self;
+
+    /**
+     * @param $url
+     * @return bool
+     */
+    public function check(string $url): bool;
 
     /**
      * Put file in storage
