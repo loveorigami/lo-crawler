@@ -19,10 +19,7 @@ use yii\helpers\ArrayHelper;
  */
 class HttpClient
 {
-    /**
-     * @var int
-     */
-    protected $id;
+      protected $id;
 
     /** @var bool */
     protected $debug;
@@ -30,9 +27,6 @@ class HttpClient
     /** @var bool */
     protected $proxy;
 
-    /**
-     * @var string
-     */
     protected $base_uri;
 
     /** @var array */
