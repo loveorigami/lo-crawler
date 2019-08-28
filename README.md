@@ -7,3 +7,5 @@
        "loveorigami/lo-crawler": "*"
   }
 ```
+
+### 2. Usage
