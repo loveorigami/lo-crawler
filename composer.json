@@ -19,6 +19,7 @@
   ],
   "require": {
     "php": ">=7.1",
+	"nesbot/carbon": "~2.16",
     "guzzlehttp/guzzle": "~6.2",
 	"imangazaliev/didom": "^1.14",
 	"league/flysystem": "^1.0",
