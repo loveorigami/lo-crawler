@@ -24,6 +24,7 @@
 	"imangazaliev/didom": "^1.14",
 	"league/flysystem": "^1.0",
 	"psr/cache": "^1.0",
+	"drupol/collection":"^0.0",
 	"symfony/cache": "~4.2.0"
   },
   "autoload": {
