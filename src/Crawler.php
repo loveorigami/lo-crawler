@@ -54,6 +54,13 @@ class Crawler implements CrawlerInterface
         $this->storage = $storage;
     }
 
+    public function login(array $params, ?string $code = null): CrawlerInterface
+    {
+        $this->client->setLoginFormParams($params)->setId($code)->login();
+
+        return $this;
+    }
+
     /**
      * Время жизни кеша
      *
@@ -78,17 +85,6 @@ class Crawler implements CrawlerInterface
         $this->filename = $filename;
 
         return $this;
-    }
-
-    /**
-     * @param $url
-     * @return bool
-     */
-    protected function check($url): bool
-    {
-        $response = $this->client->request('GET', $url);
-
-        return $response->getStatusCode() === 200;
     }
 
     /**
@@ -206,6 +202,17 @@ class Crawler implements CrawlerInterface
         $this->filename = null;
 
         return $this;
+    }
+
+    /**
+     * @param $url
+     * @return bool
+     */
+    public function check(string $url): bool
+    {
+        $response = $this->client->request('GET', $url);
+
+        return $response->getStatusCode() === 200;
     }
 
     /** @return mixed */
