@@ -150,7 +150,7 @@ class Crawler implements CrawlerInterface
                 $this->cache->save($item);
 
             } else {
-                return $this;
+                throw new DomainException($response->getBody()->getContents());
             }
         }
 
