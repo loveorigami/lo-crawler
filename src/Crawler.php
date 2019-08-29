@@ -135,6 +135,7 @@ class Crawler implements CrawlerInterface
         $item = $this->cache->getItem($key);
         //echo $key . PHP_EOL;
         if (!$item->isHit()) {
+            //echo $url . PHP_EOL; exit;
             $response = $this->client->request($method, $url, $params);
 
             if ($response->getStatusCode() === 200) {
@@ -248,7 +249,7 @@ class Crawler implements CrawlerInterface
      */
     protected function getCacheKey(string $url, array $params = []): string
     {
-        $str = \json_encode($params);
+        $str = $params ? Json::encode($params) : '';
 
         return \md5($url . $str);
     }

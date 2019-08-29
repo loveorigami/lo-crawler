@@ -7,7 +7,6 @@ use GuzzleHttp\Cookie\CookieJarInterface;
 use GuzzleHttp\Cookie\FileCookieJar;
 use GuzzleHttp\Cookie\SetCookie;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\TransferStats;
 use Psr\Http\Message\ResponseInterface;
 use yii\helpers\ArrayHelper;
@@ -87,7 +86,6 @@ class HttpClient
      * @param       $url
      * @param array $params
      * @return ResponseInterface
-     * @throws GuzzleException
      */
     public function request(string $method, string $url, array $params = []): ResponseInterface
     {
@@ -196,7 +194,7 @@ class HttpClient
 
     protected function loadProxy(): ?string
     {
-        if (\is_array($this->proxy)) {
+        if (\is_array($this->proxy) && \count($this->proxy)) {
             $key = \random_int(0, \count($this->proxy) - 1);
 
             return $this->proxy[$key];
