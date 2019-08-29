@@ -76,7 +76,7 @@ class ChannelItemDto implements RemoteImageInterface
      */
     public function getImageDir(): string
     {
-        return 'yt/user';
+        return 'user';
     }
 
     /**

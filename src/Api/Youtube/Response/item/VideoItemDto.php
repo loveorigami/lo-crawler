@@ -88,7 +88,7 @@ class VideoItemDto implements RemoteImageInterface
      */
     public function getImageDir(): string
     {
-        return 'yt/video/' . DateHelper::pathFull($this->snippet->date_create);
+        return 'video/' . DateHelper::pathFull($this->snippet->date_create);
     }
 
     /**
