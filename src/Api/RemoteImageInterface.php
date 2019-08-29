@@ -14,5 +14,5 @@ interface RemoteImageInterface
 
     public function setStorageImage(string $filename): void;
 
-    public function getImageDbName($prefix = null): ?string;
+    public function getImageDbName($prefix): ?string;
 }
