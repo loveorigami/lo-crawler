@@ -21,11 +21,9 @@ class VideoListDto
 
     public function populate($data): self
     {
-        $res = ArrayHelper::getValue($data, 'results');
-
-        $this->total = ArrayHelper::getValue($res, 'pageInfo.totalResults');
-        $items = ArrayHelper::getValue($res, 'items');
-        $this->nextPageToken = ArrayHelper::getValue($res, 'nextPageToken');
+        $this->total = ArrayHelper::getValue($data, 'pageInfo.totalResults');
+        $items = ArrayHelper::getValue($data, 'items');
+        $this->nextPageToken = ArrayHelper::getValue($data, 'nextPageToken');
         $this->pageTokens[] = $this->nextPageToken;
 
         $this->loadItems($items);

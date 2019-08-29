@@ -3,8 +3,11 @@
 namespace Lo\Crawler\Api\Youtube;
 
 use DomainException;
+use Exception;
+use InvalidArgumentException;
 use Lo\Crawler\Api\RemoteImageInterface;
 use Lo\Crawler\Api\Youtube\Response\Item\ChannelItemDto;
+use Lo\Crawler\Api\Youtube\Response\VideoListDto;
 use Lo\Crawler\CrawlerInterface;
 use Throwable;
 use yii\helpers\Json;
@@ -12,6 +15,7 @@ use yii\helpers\Json;
 class YoutubeApi
 {
     private const URL_CHANNELS = 'channels';
+    private const URL_SEARCH = 'search';
 
     protected const ONE_DAY = 86400;
     protected const THREE_DAYS = 259200;
@@ -88,6 +92,81 @@ class YoutubeApi
         }
     }
 
+    /**
+     * @param       $id
+     * @param array $optionalParams
+     * @return VideoListDto
+     * @throws Exception
+     */
+    public function getAllVideosByChannel($id, $optionalParams = []): VideoListDto
+    {
+        $params = \array_merge([
+            'part' => 'id, snippet',
+            'type' => 'video',
+            'channelId' => $id,
+            'maxResults' => 50,
+        ], $optionalParams);
+
+        $search = $this->paginateResults($params);
+        $dto = (new VideoListDto())->populate($search);
+
+        while ($dto->getNextToken()) {
+            $search = $this->paginateResults($params, $dto->getNextToken());
+            $dto->populate($search);
+        }
+
+        return $dto;
+    }
+
+    /**
+     * Generic Search Paginator, use any parameters specified in
+     * the API reference and pass through nextPageToken as $token if set.
+     *
+     * @param $params
+     * @param $token
+     * @return array
+     * @throws Exception
+     */
+    protected function paginateResults(array $params, $token = null): ?array
+    {
+        if ($token !== null) {
+            $params['pageToken'] = $token;
+        }
+
+        return $this->searchAdvanced($params);
+    }
+
+    /**
+     * Generic Search interface, use any parameters specified in
+     * the API reference
+     *
+     * @param $params
+     * @return array
+     * @throws Exception
+     */
+    protected function searchAdvanced(array $params): array
+    {
+        if (
+            !isset($params['q']) &&
+            !isset($params['channelId']) &&
+            !isset($params['videoCategoryId'])
+        ) {
+            throw new InvalidArgumentException('at least the Search query or Channel ID or videoCategoryId must be supplied');
+        }
+
+        $params['key'] = $this->apiKey;
+
+        $data = $this->client
+            ->toCache(self::THREE_DAYS)
+            ->get(self::URL_SEARCH, $params)
+            ->data();
+
+        return $this->decode($data);
+    }
+
+    /**
+     * @param RemoteImageInterface $img
+     */
     public function saveImagesToStorage(RemoteImageInterface $img): void
     {
         foreach ($img->getPrefixes() as $prefix) {
@@ -104,6 +183,10 @@ class YoutubeApi
         }
     }
 
+    /**
+     * @param string $data
+     * @return array
+     */
     protected function decode(string $data): array
     {
         return Json::decode($data);
