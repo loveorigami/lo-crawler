@@ -1,13 +1,13 @@
 <?php
 
-namespace modules\feed\components\youtube\dto\item;
+namespace Lo\Crawler\Api\Youtube\Response\Item;
 
 use yii\helpers\ArrayHelper;
 
 /**
  * Class ChannelSnippetDto
  *
- * @package modules\feed\components\youtube\dto\item
+ * @package Lo\Crawler\Api\Youtube\Response\Item
  */
 class ChannelSnippetDto extends BaseSnippetDto
 {

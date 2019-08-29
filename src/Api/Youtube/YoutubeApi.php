@@ -1,10 +1,11 @@
 <?php
 
-namespace modules\feed\services;
+namespace Lo\Crawler\Api\Youtube;
 
 use DomainException;
+use Lo\Crawler\Api\RemoteImageInterface;
+use Lo\Crawler\Api\Youtube\Response\Item\ChannelItemDto;
 use Lo\Crawler\CrawlerInterface;
-use Exception;
 use Throwable;
 use yii\helpers\Json;
 
@@ -34,7 +35,6 @@ class YoutubeApi
      * @param       $optionalParams
      * @param array $part
      * @return ChannelItemDto
-     * @throws Exception
      */
     public function getChannelByName($username, $optionalParams = [], $part = ['id', 'snippet']): ChannelItemDto
     {

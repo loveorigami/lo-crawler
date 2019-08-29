@@ -1,14 +1,14 @@
 <?php
 
-namespace modules\feed\components\youtube\dto;
+namespace Lo\Crawler\Api\Youtube\Response;
 
-use modules\feed\components\youtube\dto\item\VideoItemDto;
+use Lo\Crawler\Api\Youtube\Response\Item\VideoItemDto;
 use yii\helpers\ArrayHelper;
 
 /**
  * Class VideoListDto
  *
- * @package modules\feed\components\youtube\dto
+ * @package Lo\Crawler\Api\Youtube\Response
  */
 class VideoListDto
 {

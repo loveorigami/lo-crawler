@@ -1,10 +1,10 @@
 <?php
 
-namespace modules\feed\components\youtube\dto\item;
+namespace Lo\Crawler\Api\Youtube\Response\Item;
 
 use lo\core\helpers\DateHelper;
-use modules\feed\components\DbImageTrait;
-use modules\feed\components\RemoteImageInterface;
+use Lo\Crawler\Api\DbImageTrait;
+use Lo\Crawler\Api\RemoteImageInterface;
 use yii\helpers\ArrayHelper;
 
 /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace modules\feed\components\youtube\dto\item;
+namespace Lo\Crawler\Api\Youtube\Response\Item;
 
-use modules\feed\components\DbImageTrait;
-use modules\feed\components\RemoteImageInterface;
+use Lo\Crawler\Api\DbImageTrait;
+use Lo\Crawler\Api\RemoteImageInterface;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -40,7 +40,6 @@ use yii\helpers\ArrayHelper;
  *      'country' => string (2) "BR"
  *  ]
  *
- * @package modules\feed\components\youtube\dto
  * @author  Lukyanov Andrey <loveorigami@mail.ru>
  */
 class ChannelItemDto implements RemoteImageInterface
