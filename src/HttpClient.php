@@ -11,6 +11,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\TransferStats;
 use Psr\Http\Message\ResponseInterface;
 use yii\helpers\ArrayHelper;
+use Lo\Crawler\Helpers\UAgent;
 
 /**
  * Class HttpClient

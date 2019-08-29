@@ -1,6 +1,6 @@
 <?php
 
-namespace Lo\Crawler;
+namespace Lo\Crawler\Helpers;
 
 use Exception;
 use InvalidArgumentException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lo\Crawler;
+namespace Lo\Crawler\Helpers;
 
 class UAgent
 {
