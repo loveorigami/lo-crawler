@@ -99,7 +99,9 @@ class Crawler implements CrawlerInterface
         if ($this->filename && $this->storage->has($this->filename)) {
             $this->read();
         } else {
-            $this->request('GET', $url, $params);
+            $this->request('GET', $url, [
+                'query' => $params,
+            ]);
         }
 
         return $this;
@@ -113,7 +115,9 @@ class Crawler implements CrawlerInterface
      */
     public function post(string $url, array $params = []): CrawlerInterface
     {
-        $this->request('POST', $url, $params);
+        $this->request('POST', $url, [
+            'form_params' => $params,
+        ]);
 
         return $this;
     }
