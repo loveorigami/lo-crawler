@@ -19,6 +19,7 @@ class YoutubeApi
 
     protected const ONE_DAY = 86400;
     protected const THREE_DAYS = 259200;
+    protected const FIVE_DAYS = 432000;
 
     protected $apiKey;
     protected $client;
@@ -157,7 +158,7 @@ class YoutubeApi
         $params['key'] = $this->apiKey;
 
         $data = $this->client
-            ->asCache(self::THREE_DAYS)
+            ->asCache(self::FIVE_DAYS)
             ->get(self::URL_SEARCH, $params)
             ->data();
 
