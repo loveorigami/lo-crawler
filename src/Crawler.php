@@ -39,9 +39,6 @@ class Crawler implements CrawlerInterface
     /** @var string */
     private $data;
 
-    /** @var array */
-    private $excludeParams = [];
-
     /**
      * Crawler constructor.
      *
@@ -72,7 +69,7 @@ class Crawler implements CrawlerInterface
      * @param int $ttl
      * @return Crawler
      */
-    public function toCache(int $ttl = 0): CrawlerInterface
+    public function asCache(int $ttl = 0): CrawlerInterface
     {
         $this->cached = true;
         $this->ttl = $ttl;
@@ -84,23 +81,10 @@ class Crawler implements CrawlerInterface
      * @param string $filename
      * @return Crawler
      */
-    public function file(string $filename): CrawlerInterface
+    public function asFile(string $filename): CrawlerInterface
     {
         $this->cached = false;
         $this->filename = $filename;
-
-        return $this;
-    }
-
-    /**
-     * @param string ...$str
-     * @return CrawlerInterface
-     */
-    public function exclude(string ...$str): CrawlerInterface
-    {
-        foreach ($str as $item) {
-            $this->excludeParams[] = $item;
-        }
 
         return $this;
     }
@@ -266,12 +250,6 @@ class Crawler implements CrawlerInterface
      */
     protected function getCacheKey(string $url, array $params = []): string
     {
-        if ($params && $this->excludeParams) {
-            foreach ($this->excludeParams as $key) {
-                ArrayHelper::remove($params, $key);
-            }
-        }
-
         $str = $params ? Json::encode($params) : '';
 
         return \md5($url . $str);

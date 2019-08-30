@@ -52,7 +52,7 @@ class YoutubeApi
 
         try {
             $data = $this->client
-                ->toCache(self::ONE_DAY)
+                ->asCache(self::ONE_DAY)
                 ->get(self::URL_CHANNELS, $params)
                 ->data();
 
@@ -81,7 +81,7 @@ class YoutubeApi
 
         try {
             $data = $this->client
-                ->toCache(self::ONE_DAY)
+                ->asCache(self::ONE_DAY)
                 ->get(self::URL_CHANNELS, $params)
                 ->data();
 
@@ -157,7 +157,7 @@ class YoutubeApi
         $params['key'] = $this->apiKey;
 
         $data = $this->client
-            ->toCache(self::THREE_DAYS)
+            ->asCache(self::THREE_DAYS)
             ->get(self::URL_SEARCH, $params)
             ->data();
 
@@ -175,7 +175,7 @@ class YoutubeApi
             $path = $img->getImageDir() . '/' . $filename;
 
             try {
-                $this->client->file($path)->get($url)->save();
+                $this->client->asFile($path)->get($url)->save();
                 $img->setStorageImage($filename);
             } catch (Throwable $exception) {
 
