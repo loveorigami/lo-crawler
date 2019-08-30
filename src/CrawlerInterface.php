@@ -10,6 +10,7 @@ namespace Lo\Crawler;
 interface CrawlerInterface
 {
     /**
+     * 1.
      * Cache time life
      *
      * @param int $ttl
@@ -18,12 +19,21 @@ interface CrawlerInterface
     public function toCache(int $ttl = 0): self;
 
     /**
+     * 1.
      * @param string $filename
      * @return self
      */
     public function file(string $filename): self;
 
     /**
+     * 2.
+     * @param string ...$str
+     * @return CrawlerInterface
+     */
+    public function exclude(string ...$str): self;
+
+    /**
+     * 3.
      * @param array       $params
      * @param string|null $code
      * @return self
@@ -31,6 +41,7 @@ interface CrawlerInterface
     public function login(array $params, ?string $code = null): self;
 
     /**
+     * 4.
      * @param string $url
      * @param array  $params
      * @return self
@@ -38,6 +49,7 @@ interface CrawlerInterface
     public function get(string $url, array $params = []): self;
 
     /**
+     * 4.
      * @param string $url
      * @param array  $params
      * @return self
@@ -57,12 +69,6 @@ interface CrawlerInterface
     public function convert(): self;
 
     /**
-     * @param $url
-     * @return bool
-     */
-    public function check(string $url): bool;
-
-    /**
      * Put file in storage
      *
      * @param bool $rewrite
@@ -70,6 +76,11 @@ interface CrawlerInterface
      */
     public function save($rewrite = false): self;
 
+    /**
+     * @param $url
+     * @return bool
+     */
+    public function check(string $url): bool;
 
     /** @return string|null */
     public function data(): ?string;
