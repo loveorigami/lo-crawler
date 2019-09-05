@@ -74,4 +74,9 @@ class VideoListDto
     {
         return $this->nextPageToken;
     }
+
+    public function getTotal(): int
+    {
+        return $this->total;
+    }
 }

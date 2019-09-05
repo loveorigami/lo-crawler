@@ -99,6 +99,27 @@ class YoutubeApi
      * @return VideoListDto
      * @throws Exception
      */
+    public function getCountVideosByChannel($id, $optionalParams = []): VideoListDto
+    {
+        $params = \array_merge([
+            'part' => 'id, snippet',
+            'type' => 'video',
+            'channelId' => $id,
+            'maxResults' => 1,
+        ], $optionalParams);
+
+        $search = $this->paginateResults($params);
+        $dto = (new VideoListDto())->populate($search);
+
+        return $dto;
+    }
+
+    /**
+     * @param       $id
+     * @param array $optionalParams
+     * @return VideoListDto
+     * @throws Exception
+     */
     public function getAllVideosByChannel($id, $optionalParams = []): VideoListDto
     {
         $params = \array_merge([
