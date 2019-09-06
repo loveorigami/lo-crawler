@@ -177,6 +177,7 @@ class YoutubeApi
         }
 
         $params['key'] = $this->apiKey;
+        $params['order'] = 'date';
 
         $data = $this->client
             ->asCache(self::FIVE_DAYS)

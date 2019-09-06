@@ -200,6 +200,10 @@ class Crawler implements CrawlerInterface
             throw new DomainException('File path must be set');
         }
 
+        if (!$this->data) {
+            throw new DomainException('File is empty');
+        }
+
         if (!$this->storage->has($this->filename)) {
             $this->storage->put($this->filename, $this->data);
         } elseif ($rewrite) {
