@@ -71,6 +71,12 @@ interface CrawlerInterface
     public function check(string $url): bool;
 
     /**
+     * @param $filename
+     * @return bool
+     */
+    public function has(string $filename): bool;
+
+    /**
      * @return string|null
      */
     public function data(): ?string;

@@ -109,9 +109,8 @@ class YoutubeApi
         ], $optionalParams);
 
         $search = $this->paginateResults($params);
-        $dto = (new VideoListDto())->populate($search);
 
-        return $dto;
+        return (new VideoListDto())->populate($search);
     }
 
     /**
@@ -201,7 +200,7 @@ class YoutubeApi
                 $this->client->asFile($path)->get($url)->save();
                 $img->setStorageImage($filename);
             } catch (Throwable $exception) {
-
+                //exit($exception->getMessage());
             }
         }
     }

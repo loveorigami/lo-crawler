@@ -8,7 +8,6 @@ use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
 /**
@@ -97,8 +96,14 @@ class Crawler implements CrawlerInterface
      */
     public function get(string $url, array $params = []): CrawlerInterface
     {
-        if ($this->filename && $this->storage->has($this->filename)) {
-            $this->read();
+        if ($this->filename) {
+            if ($this->has($this->filename)) {
+                /** load $this->data from storage */
+                $this->read();
+            } else {
+                /** or from url */
+                $this->populate($url);
+            }
         } else {
             $this->request('GET', $url, [
                 'query' => $params,
@@ -187,6 +192,15 @@ class Crawler implements CrawlerInterface
         return $this;
     }
 
+    protected function populate(string $url): self
+    {
+        if ($this->check($url)) {
+            $this->data = \file_get_contents($url);
+        }
+
+        return $this;
+    }
+
     /**
      * Ложим файл прямо в хранилище, минуя кеш
      *
@@ -204,7 +218,7 @@ class Crawler implements CrawlerInterface
             throw new DomainException('File is empty');
         }
 
-        if (!$this->storage->has($this->filename)) {
+        if (!$this->has($this->filename)) {
             $this->storage->put($this->filename, $this->data);
         } elseif ($rewrite) {
             $this->storage->update($this->filename, $this->data);
@@ -236,10 +250,20 @@ class Crawler implements CrawlerInterface
      */
     public function check(string $url): bool
     {
-        $response = $this->client->request('GET', $url);
+        $headers = \get_headers($url);
 
-        return $response->getStatusCode() === 200;
+        return \stripos($headers[0], '200 OK') ? true : false;
     }
+
+    /**
+     * @param string $filename
+     * @return bool
+     */
+    public function has(string $filename): bool
+    {
+        return $this->storage->has($filename);
+    }
+
 
     /** @return mixed */
     public function data(): ?string
