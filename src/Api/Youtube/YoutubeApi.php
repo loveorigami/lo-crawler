@@ -105,7 +105,7 @@ class YoutubeApi
 
         try {
             $data = $this->client
-                ->asCache(self::FIVE_DAYS)
+                ->asCache(self::ONE_DAY)
                 ->get(self::URL_PLAYLIST_ITEMS, $params)
                 ->data();
 
