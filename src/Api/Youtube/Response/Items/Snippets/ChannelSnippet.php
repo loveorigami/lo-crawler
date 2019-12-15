@@ -1,9 +1,6 @@
 <?php
 
-namespace Lo\Crawler\Api\Youtube\Response\Item;
-
-use Carbon\Carbon;
-use yii\helpers\ArrayHelper;
+namespace Lo\Crawler\Api\Youtube\Response\Items\Snippets;
 
 /**
  * Class ChannelDto
@@ -39,35 +36,12 @@ use yii\helpers\ArrayHelper;
  *      'country' => string (2) "BR"
  *  ]
  *
- * @package modules\feed\components\youtube\dto
- * @author  Lukyanov Andrey <loveorigami@mail.ru>
  */
-abstract class BaseSnippetDto
+class ChannelSnippet extends BaseSnippet
 {
-    protected $data;
+    /** @var null|string */
+    public $country;
 
-    public $title;
-    public $description;
-    public $date_create;
-    public $image_s;
-    public $image_m;
-    public $image_h;
-
-    public function __construct(array $data)
-    {
-        $this->data = $data;
-        $this->populate();
-    }
-
-    public function populate(): void
-    {
-        $this->title = ArrayHelper::getValue($this->data, 'title');
-        $this->description = ArrayHelper::getValue($this->data, 'description');
-
-        $publishedAt = ArrayHelper::getValue($this->data, 'publishedAt');
-        $this->date_create = Carbon::createFromDate($publishedAt)->timestamp;
-        $this->image_s = ArrayHelper::getValue($this->data, 'thumbnails.default.url');
-        $this->image_m = ArrayHelper::getValue($this->data, 'thumbnails.medium.url');
-        $this->image_h = ArrayHelper::getValue($this->data, 'thumbnails.high.url');
-    }
+    /** @var null|string */
+    public $customUrl;
 }

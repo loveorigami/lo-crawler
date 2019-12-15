@@ -6,14 +6,17 @@ use DomainException;
 use Exception;
 use InvalidArgumentException;
 use Lo\Crawler\Api\RemoteImageInterface;
-use Lo\Crawler\Api\Youtube\Response\Item\ChannelItemDto;
-use Lo\Crawler\Api\Youtube\Response\VideoListDto;
+use Lo\Crawler\Api\Youtube\Response\ChannelResponse;
+use Lo\Crawler\Api\Youtube\Response\PlaylistItemsResponse;
+use Lo\Crawler\Api\Youtube\Response\PlaylistResponse;
 use Lo\Crawler\CrawlerInterface;
 use Throwable;
 use yii\helpers\Json;
 
 class YoutubeApi
 {
+    private const URL_PLAYLIST_ITEMS = 'playlistItems';
+    private const URL_PLAYLISTS = 'playlists';
     private const URL_CHANNELS = 'channels';
     private const URL_SEARCH = 'search';
 
@@ -38,15 +41,14 @@ class YoutubeApi
     /**
      * @param       $username
      * @param       $optionalParams
-     * @param array $part
-     * @return ChannelItemDto
+     * @return ChannelResponse
      */
-    public function getChannelByName($username, $optionalParams = [], $part = ['id', 'snippet']): ChannelItemDto
+    public function getChannelByName($username, $optionalParams = []): ChannelResponse
     {
         $params = \array_merge([
             'key' => $this->apiKey,
             'forUsername' => $username,
-            'part' => \implode(', ', $part),
+            'part' => 'id, snippet, contentDetails',
             'type' => 'video',
             'maxResults' => 50,
         ], $optionalParams);
@@ -57,7 +59,7 @@ class YoutubeApi
                 ->get(self::URL_CHANNELS, $params)
                 ->data();
 
-            return ChannelItemDto::populate($this->decode($data));
+            return new ChannelResponse($this->decode($data));
 
         } catch (Throwable $exception) {
             throw new DomainException($exception->getMessage());
@@ -67,15 +69,14 @@ class YoutubeApi
     /**
      * @param       $id
      * @param array $optionalParams
-     * @param array $part
-     * @return ChannelItemDto|null
+     * @return ChannelResponse|null
      */
-    public function getChannelById($id, $optionalParams = [], $part = ['id', 'snippet']): ChannelItemDto
+    public function getChannelById($id, $optionalParams = []): ChannelResponse
     {
         $params = \array_merge([
             'key' => $this->apiKey,
-            'id' => \is_array($id) ? \implode(',', $id) : $id,
-            'part' => \implode(', ', $part),
+            'id' => $id,
+            'part' => 'id, snippet, contentDetails',
             'type' => 'video',
             'maxResults' => 50,
         ], $optionalParams);
@@ -86,57 +87,55 @@ class YoutubeApi
                 ->get(self::URL_CHANNELS, $params)
                 ->data();
 
-            return ChannelItemDto::populate($this->decode($data));
+            return new ChannelResponse($this->decode($data));
 
         } catch (Throwable $exception) {
             throw new DomainException($exception->getMessage());
         }
     }
 
-    /**
-     * @param       $id
-     * @param array $optionalParams
-     * @return VideoListDto
-     * @throws Exception
-     */
-    public function getCountVideosByChannel($id, $optionalParams = []): VideoListDto
+    public function getVideosByPlaylistId($id, $optionalParams = []): PlaylistItemsResponse
     {
         $params = \array_merge([
-            'part' => 'id, snippet',
-            'type' => 'video',
-            'channelId' => $id,
-            'maxResults' => 1,
+            'key' => $this->apiKey,
+            'playlistId' => $id,
+            'part' => 'id, snippet, contentDetails',
+            'maxResults' => 50,
         ], $optionalParams);
 
-        $search = $this->paginateResults($params);
+        try {
+            $data = $this->client
+                ->asCache(self::FIVE_DAYS)
+                ->get(self::URL_PLAYLIST_ITEMS, $params)
+                ->data();
 
-        return (new VideoListDto())->populate($search);
+            return new PlaylistItemsResponse($this->decode($data));
+
+        } catch (Throwable $exception) {
+            throw new DomainException($exception->getMessage());
+        }
     }
 
-    /**
-     * @param       $id
-     * @param array $optionalParams
-     * @return VideoListDto
-     * @throws Exception
-     */
-    public function getAllVideosByChannel($id, $optionalParams = []): VideoListDto
+    public function getPlaylistsByChannelId($id, $optionalParams = [])
     {
         $params = \array_merge([
+            'key' => $this->apiKey,
             'part' => 'id, snippet',
-            'type' => 'video',
             'channelId' => $id,
             'maxResults' => 50,
         ], $optionalParams);
 
-        $search = $this->paginateResults($params);
-        $dto = (new VideoListDto())->populate($search);
+        try {
+            $data = $this->client
+                ->asCache(self::ONE_DAY)
+                ->get(self::URL_PLAYLISTS, $params)
+                ->data();
 
-        while ($dto->getNextToken()) {
-            $search = $this->paginateResults($params, $dto->getNextToken());
-            $dto->populate($search);
+            return new PlaylistResponse($this->decode($data));
+
+        } catch (Throwable $exception) {
+            throw new DomainException($exception->getMessage());
         }
-
-        return $dto;
     }
 
     /**
