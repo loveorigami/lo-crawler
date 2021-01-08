@@ -59,7 +59,9 @@ class FileInfo
      */
     public function getBaseName(): string
     {
-        return \basename($this->file);
+        $path=explode("?",$this->file);
+
+        return \basename($path[0]);
     }
 
     /**
