@@ -18,4 +18,10 @@ class VideoSnippet extends BaseSnippet
 
     /** @var array */
     public $resourceId;
+
+    /** @var string */
+    public $videoOwnerChannelTitle;
+
+    /** @var string */
+    public $videoOwnerChannelId;
 }
